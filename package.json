@@ -1,0 +1,24 @@
+{
+  "name": "backendtodoapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cristiandrc/BackEndTodoApp.git"
+  },
+  "author": "Criatian Rojas <cristian.rojas.d@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cristiandrc/BackEndTodoApp/issues"
+  },
+  "homepage": "https://github.com/cristiandrc/BackEndTodoApp#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.14"
+  }
+}
