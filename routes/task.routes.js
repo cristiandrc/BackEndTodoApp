@@ -7,15 +7,15 @@ const { createTaskSchema } = require('../schemas/task.schema');
 const service = new TaskService();
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   const { userId } = req.body;
-  const userTasks = service.find(userId);
-  res.json(userTasks);
+  const userTasks = await service.find(userId);
+  res.status(200).json(userTasks);
 });
 
-router.post('/', validateHandler(createTaskSchema), (req, res) => {
+router.post('/', validateHandler(createTaskSchema), async (req, res) => {
   const { body } = req;
-  const newTask = service.create(body);
+  const newTask = await service.create(body);
   res.status(201).json(newTask);
 });
 

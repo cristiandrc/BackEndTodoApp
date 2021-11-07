@@ -1,39 +1,20 @@
-const task = [
-  {
-    id: 1,
-    userId: 1,
-    task: 'comprar',
-  },
-  {
-    id: 2,
-    userId: 1,
-    task: 'comprar',
-  },
-  {
-    id: 3,
-    userId: 2,
-    task: 'comprar',
-  },
-  {
-    id: 4,
-    userId: 2,
-    task: 'comprar',
-  },
-  {
-    id: 5,
-    userId: 3,
-    task: 'comprar',
-  },
-];
-
+const taskModel = require('../lib/models/task.model');
 class TaskService {
-  find(userId) {
-    const userTasks = task.filter((d) => d.userId == userId);
-    return userTasks;
+  async find(userID) {
+    return new Promise((resolve, reject) => {
+      taskModel
+        .find({ userId: userID })
+        .populate('userId')
+        .exec((err, populate) => {
+          if (err) reject(err);
+          resolve(populate);
+        });
+    });
   }
 
-  create(newTask) {
-    task.push(newTask);
+  create(task) {
+    const newTask = new taskModel(task);
+    newTask.save();
     return newTask;
   }
 }
