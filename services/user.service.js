@@ -1,31 +1,21 @@
-const users = [
-  {
-    id: 1,
-    name: 'cristian',
-  },
-];
-
-const task = [
-  {
-    id: 1,
-    userId: 1,
-    task: 'comprar',
-  },
-  {
-    id: 1,
-    userId: 1,
-    task: 'comprar',
-  },
-];
+const boom = require('@hapi/boom');
+const userModel = require('../lib/models/user.model');
 
 class UserService {
-  find() {
+  async find() {
+    const users = await userModel.find();
     return users;
   }
 
-  create(user) {
-    users.push(user);
-    return user;
+  async create(user) {
+    const mailExist = await userModel.findOne({ email: user.email });
+    if (mailExist?.email) {
+      throw boom.badRequest();
+    }
+
+    const newUser = new userModel(user);
+    newUser.save();
+    return newUser;
   }
 }
 

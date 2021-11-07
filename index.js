@@ -1,5 +1,7 @@
 const express = require('express');
 const routerApp = require('./routes/');
+const { config } = require('./config');
+require('./lib/mongo').connect();
 
 //import err middleware
 const {
@@ -25,4 +27,6 @@ app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 
-app.listen(3000, () => console.log('listen http://localhost:3000'));
+app.listen(config.port, () =>
+  console.log(`listen http://localhost:${config.port}`)
+);

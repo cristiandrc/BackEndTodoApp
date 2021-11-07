@@ -1,4 +1,5 @@
 const express = require('express');
+const boom = require('@hapi/boom');
 const UserService = require('../services/user.service');
 
 const { createUserSchema } = require('../schemas/user.schema');
@@ -9,15 +10,23 @@ const service = new UserService();
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  const task = service.find();
-  res.status(200).json(task);
+router.get('/', async (req, res, next) => {
+  try {
+    const task = await service.find();
+    res.status(200).json(task);
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.post('/', validateHandler(createUserSchema), (req, res) => {
-  const { body } = req;
-  const newTask = service.create(body);
-  res.status(201).json(newTask);
+router.post('/', validateHandler(createUserSchema), async (req, res, next) => {
+  try {
+    const { body } = req;
+    const newTask = await service.create(body);
+    res.status(201).json(newTask);
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;
