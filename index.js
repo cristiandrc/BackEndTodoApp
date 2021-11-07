@@ -6,6 +6,7 @@ const {
   logErrors,
   errorHandler,
   notFoundHandler,
+  boomErrorHandler,
 } = require('./middlewares/error.handler');
 
 //create app
@@ -21,6 +22,7 @@ app.use(notFoundHandler);
 
 //middlewares de error
 app.use(logErrors);
+app.use(boomErrorHandler);
 app.use(errorHandler);
 
 app.listen(3000, () => console.log('listen http://localhost:3000'));

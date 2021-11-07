@@ -28,7 +28,7 @@ const task = [
 
 class TaskService {
   find(userId) {
-    const userTasks = task.filter((d) => d.userId === userId);
+    const userTasks = task.filter((d) => d.userId == userId);
     return userTasks;
   }
 

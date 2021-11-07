@@ -15,6 +15,14 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
+const boomErrorHandler = (err, req, res, next) => {
+  if (err.isBoom) {
+    const { output } = err;
+    res.status(output.statusCode).json(output.payload);
+  }
+  next();
+};
+
 const notFoundHandler = (req, res) => {
   const {
     output: { statusCode, payload },
@@ -22,4 +30,4 @@ const notFoundHandler = (req, res) => {
   res.status(statusCode).json(payload);
 };
 
-module.exports = { logErrors, errorHandler, notFoundHandler };
+module.exports = { logErrors, errorHandler, notFoundHandler, boomErrorHandler };
