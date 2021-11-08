@@ -12,11 +12,15 @@ const service = new TaskService();
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
-  const { userId } = req.body;
-  if (!userId) next(boom.badRequest());
+  try {
+    const { userId } = req.body;
+    if (!userId) next(boom.badRequest());
 
-  const userTasks = await service.find(userId);
-  res.status(200).json(userTasks);
+    const userTasks = await service.find(userId);
+    res.status(200).json(userTasks);
+  } catch (err) {
+    next(boom.badRequest(err));
+  }
 });
 
 router.post('/', validateHandler(createTaskSchema), async (req, res, next) => {

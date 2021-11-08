@@ -1,4 +1,5 @@
 const boom = require('@hapi/boom');
+const bcrypt = require('bcrypt');
 const userModel = require('../lib/models/user.model');
 
 class UserService {
@@ -7,14 +8,21 @@ class UserService {
     return users;
   }
 
+  async findByEmail(email) {
+    const user = await userModel.findOne({ email: email });
+    // if (!user) throw boom.notFound('user not found');
+    return user;
+  }
+
   async create(user) {
     const mailExist = await userModel.findOne({ email: user.email });
     if (mailExist?.email) {
       throw boom.badRequest();
     }
-
-    const newUser = new userModel(user);
+    const hash = await bcrypt.hash(user.password, 10);
+    const newUser = new userModel({ ...user, password: hash });
     newUser.save();
+
     return newUser;
   }
 }

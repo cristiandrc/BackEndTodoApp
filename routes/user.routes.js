@@ -22,8 +22,8 @@ router.get('/', async (req, res, next) => {
 router.post('/', validateHandler(createUserSchema), async (req, res, next) => {
   try {
     const { body } = req;
-    const newTask = await service.create(body);
-    res.status(201).json(newTask);
+    const newUser = await service.create(body);
+    res.status(201).json(newUser);
   } catch (err) {
     next(err);
   }

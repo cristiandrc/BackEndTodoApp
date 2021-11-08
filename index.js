@@ -1,7 +1,11 @@
 const express = require('express');
 const routerApp = require('./routes/');
+const passport = require('passport');
 const { config } = require('./config');
 require('./lib/mongo').connect();
+
+//para user el passport
+require('./auth');
 
 //import err middleware
 const {
@@ -16,6 +20,9 @@ const app = express();
 
 //parcel JSON
 app.use(express.json());
+
+//inicializar el passport
+app.use(passport.initialize());
 
 routerApp(app);
 
