@@ -1,4 +1,7 @@
+const boom = require('@hapi/boom');
+
 const taskModel = require('../lib/models/task.model');
+const userModel = require('../lib/models/user.model');
 class TaskService {
   async find(userID) {
     return new Promise((resolve, reject) => {
@@ -12,10 +15,24 @@ class TaskService {
     });
   }
 
-  create(task) {
+  async create(task) {
     const newTask = new taskModel(task);
-    newTask.save();
+    const error = await newTask.save().catch((err) => {
+      console.log('err');
+      return boom.badRequest();
+    });
+    if (error?.isBoom) throw error;
     return newTask;
+  }
+
+  async update({ id, data }) {
+    const task = await taskModel.updateOne({ _id: id }, { ...data });
+    return task;
+  }
+
+  async delete({ id }) {
+    const taskDelete = await taskModel.deleteOne({ _id: id });
+    return taskDelete;
   }
 }
 
