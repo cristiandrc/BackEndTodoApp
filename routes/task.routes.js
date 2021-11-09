@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 const boom = require('@hapi/boom');
 const TaskService = require('../services/task.service');
 
@@ -11,17 +12,21 @@ const {
 const service = new TaskService();
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  try {
-    const { userId } = req.body;
-    if (!userId) next(boom.badRequest());
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.sub;
+      if (!userId) next(boom.badRequest());
 
-    const userTasks = await service.find(userId);
-    res.status(200).json(userTasks);
-  } catch (err) {
-    next(boom.badRequest(err));
+      const userTasks = await service.find(userId);
+      res.status(200).json(userTasks);
+    } catch (err) {
+      next(boom.badRequest(err));
+    }
   }
-});
+);
 
 router.post('/', validateHandler(createTaskSchema), async (req, res, next) => {
   try {

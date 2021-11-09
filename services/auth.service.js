@@ -1,5 +1,7 @@
 const boom = require('@hapi/boom');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { config } = require('../config/');
 
 const UserService = require('./user.service');
 const service = new UserService();
@@ -13,6 +15,16 @@ class AuthService {
     if (!isMatch) throw boom.unauthorized();
 
     return user;
+  }
+
+  signToken(user) {
+    const payload = {
+      sub: user.id,
+    };
+
+    const token = jwt.sign(payload, config.jwtSecretLogin);
+
+    return { user, token };
   }
 }
 
