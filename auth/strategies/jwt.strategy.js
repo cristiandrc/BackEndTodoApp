@@ -7,7 +7,6 @@ const options = {
 };
 
 const JwtStrategy = new Strategy(options, (payload, done) => {
-  console.log(`object`, payload);
   return done(null, payload);
 });
 

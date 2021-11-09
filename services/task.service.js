@@ -1,7 +1,6 @@
 const boom = require('@hapi/boom');
 
 const taskModel = require('../lib/models/task.model');
-const userModel = require('../lib/models/user.model');
 class TaskService {
   async find(userID) {
     return new Promise((resolve, reject) => {
@@ -15,10 +14,14 @@ class TaskService {
     });
   }
 
+  async findOne(taskId) {
+    const task = await taskModel.findOne({ _id: taskId });
+    return task;
+  }
+
   async create(task) {
     const newTask = new taskModel(task);
     const error = await newTask.save().catch((err) => {
-      console.log('err');
       return boom.badRequest();
     });
     if (error?.isBoom) throw error;

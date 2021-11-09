@@ -28,25 +28,39 @@ router.get(
   }
 );
 
-router.post('/', validateHandler(createTaskSchema), async (req, res, next) => {
-  try {
-    const { body } = req;
-    const newTask = await service.create(body);
-    res.status(201).json(newTask);
-  } catch (err) {
-    next(err);
+router.post(
+  '/',
+  validateHandler(createTaskSchema),
+  passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
+    try {
+      const task = req.body;
+      const userId = req.user.sub;
+      const newTask = await service.create({ ...task, userId });
+      res.status(201).json(newTask);
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
-router.patch('/', validateHandler(updateUserSchema), async (req, res, next) => {
-  try {
-    const data = req.body;
-    const taskUpdate = await service.update(data);
-    res.json(taskUpdate);
-  } catch (err) {
-    next(err);
+router.patch(
+  '/',
+  validateHandler(updateUserSchema),
+  passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
+    try {
+      const data = req.body;
+      const task = await service.findOne(data.id);
+      if (req.user.sub !== String(task.userId)) throw boom.unauthorized();
+
+      const taskUpdate = await service.update(data);
+      res.json(taskUpdate);
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 router.delete(
   '/',
