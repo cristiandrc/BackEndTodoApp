@@ -20,4 +20,8 @@ const updateUserSchema = Joi.object({
   },
 });
 
-module.exports = { createTaskSchema, updateUserSchema };
+const deleteUserSchema = Joi.object({
+  taskId: id.required(),
+});
+
+module.exports = { createTaskSchema, updateUserSchema, deleteUserSchema };

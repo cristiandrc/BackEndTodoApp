@@ -33,7 +33,7 @@ class TaskService {
     return task;
   }
 
-  async delete({ id }) {
+  async delete(id) {
     const taskDelete = await taskModel.deleteOne({ _id: id });
     return taskDelete;
   }
