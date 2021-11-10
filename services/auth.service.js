@@ -26,6 +26,20 @@ class AuthService {
 
     return { user, token };
   }
+
+  async changePassword(userId, password, newPassword) {
+    const user = await service.findOne(userId);
+    if (!user) throw boom.unauthorized();
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) throw boom.unauthorized();
+
+    const hash = await bcrypt.hash(newPassword, 10);
+
+    const isUpdate = await service.update(userId, { password: hash });
+
+    return isUpdate;
+  }
 }
 
 module.exports = AuthService;

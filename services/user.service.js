@@ -7,6 +7,10 @@ class UserService {
     const users = await userModel.find();
     return users;
   }
+  async findOne(id) {
+    const user = await userModel.findOne({ _id: id });
+    return user;
+  }
 
   async findByEmail(email) {
     const user = await userModel.findOne({ email: email });
@@ -24,6 +28,12 @@ class UserService {
     newUser.save();
 
     return newUser;
+  }
+
+  async update(id, newData) {
+    const isUpdate = await userModel.updateOne({ _id: id }, { ...newData });
+
+    return isUpdate;
   }
 }
 
