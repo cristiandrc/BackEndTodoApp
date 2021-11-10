@@ -6,7 +6,11 @@ const AuthService = require('../services/auth.service');
 const service = new AuthService();
 
 const validateHandler = require('../middlewares/validator.handler');
-const { updateAuthSchema } = require('../schemas/auth.schema');
+const {
+  updateAuthSchema,
+  recoveryAuthSchema,
+} = require('../schemas/auth.schema');
+const { json } = require('express');
 
 router.post(
   '/login',
@@ -36,6 +40,20 @@ router.post(
       );
 
       res.json(isUpdate);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.post(
+  '/recovery',
+  validateHandler(recoveryAuthSchema),
+  async (req, res, next) => {
+    try {
+      const { email } = req.body;
+      const isSend = await service.sendRecovery(email);
+      res.json(isSend);
     } catch (err) {
       next(err);
     }
