@@ -1,5 +1,6 @@
 const express = require('express');
 const routerApp = require('./routes/');
+const cors = require('cors');
 const passport = require('passport');
 const { config } = require('./config');
 require('./lib/mongo').connect();
@@ -17,6 +18,9 @@ const {
 
 //create app
 const app = express();
+
+//cors
+app.use(cors());
 
 //parcel JSON
 app.use(express.json());
