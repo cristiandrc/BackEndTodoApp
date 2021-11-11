@@ -52,6 +52,8 @@ class AuthService {
     });
     const link = `http://localhost:5055/recovery?token=${token}`;
 
+    await service.update({ _id: user.id }, { recoveryToken: token });
+
     const infoEmail = {
       from: config.email,
       to: user.email,
@@ -63,6 +65,31 @@ class AuthService {
 
     const answer = this.sendEmail(infoEmail);
     return answer;
+  }
+
+  async recoveryPassword(token, newPassword) {
+    //verificar token
+    const payload = jwt.verify(
+      token,
+      config.jwtSecretRecovery,
+      (err, decoded) => {
+        if (err) throw boom.unauthorized(err.message);
+        return decoded;
+      }
+    );
+    const user = await service.findOne({ _id: payload.sub });
+    if (user.recoveryToken !== token) {
+      throw boom.badRequest('token invalido');
+    }
+
+    const hash = await bcrypt.hash(newPassword, 10);
+
+    const isUpdate = await service.update(payload.sub, {
+      password: hash,
+      recoveryToken: null,
+    });
+
+    return isUpdate;
   }
 
   async sendEmail(infoEmail) {

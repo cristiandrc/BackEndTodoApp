@@ -9,6 +9,7 @@ const validateHandler = require('../middlewares/validator.handler');
 const {
   updateAuthSchema,
   recoveryAuthSchema,
+  passwordAuthSchema,
 } = require('../schemas/auth.schema');
 const { json } = require('express');
 
@@ -54,6 +55,21 @@ router.post(
       const { email } = req.body;
       const isSend = await service.sendRecovery(email);
       res.json(isSend);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.post(
+  '/recovery-password',
+  validateHandler(passwordAuthSchema),
+  async (req, res, next) => {
+    try {
+      const { token, newPassword } = req.body;
+      const rta = await service.recoveryPassword(token, newPassword);
+
+      res.json(rta);
     } catch (err) {
       next(err);
     }
