@@ -50,7 +50,7 @@ class AuthService {
     const token = jwt.sign(payload, config.jwtSecretRecovery, {
       expiresIn: '5min',
     });
-    const link = `http://localhost:5055/recovery?token=${token}`;
+    const link = `https://todo-app-cristiandrc.vercel.app/recovery/:${token}`;
 
     await service.update({ _id: user.id }, { recoveryToken: token });
 
