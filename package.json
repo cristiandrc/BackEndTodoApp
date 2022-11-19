@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node index.js",
+    "start": "node index.js",
     "dev": "nodemon index.js"
   },
   "repository": {
@@ -32,9 +32,13 @@
     "nodemon": "^2.0.14",
     "passport": "^0.5.0",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "vercel": "^28.5.5"
   },
   "engines": {
     "node": "14.x"
+  },
+  "devDependencies": {
+    "@vercel/node": "^2.6.3"
   }
 }
